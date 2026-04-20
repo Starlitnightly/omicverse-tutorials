@@ -5,3 +5,4 @@ Tutorials that span **more than one modality** — converting between bulk RNA-s
 ## Sections
 
 - [Bulk ↔ Single-cell ↔ Spatial](bulk-single/index.md) — translate between bulk pseudo-cells, scRNA-seq cells, and spatial spots.
+- [Microbe ↔ Metabolite](micro-meta/index.md) — paired 16S + LC-MS integration (Spearman on CLR, CCA, MMvec-style bilinear model).

@@ -98,6 +98,8 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
 - [Bulk RNA-seq generate 'interrupted' cells to interpolate scRNA-seq](Tutorials-Multi-Omics/bulk-single/t_bulktrajblend.ipynb)
 - [Bulk RNA-seq to Single RNA-seq](Tutorials-Multi-Omics/bulk-single/t_bulk2single.ipynb)
 - [Single RNA-seq to Spatial RNA-seq](Tutorials-Multi-Omics/bulk-single/t_single2spatial.ipynb)
+- [Microbe ↔ Metabolite overview](Tutorials-Multi-Omics/micro-meta/index.md)
+- [Paired microbe ↔ metabolite integration (MMvec-style)](Tutorials-Multi-Omics/micro-meta/t_micro_metabol_paired.ipynb)
 
 ## Space
 

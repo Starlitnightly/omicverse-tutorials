@@ -12,3 +12,10 @@ integrating across omics layers.
 ../Tutorials-Multi-Omics/bulk-single/t_bulk2single
 ../Tutorials-Multi-Omics/bulk-single/t_single2spatial
 ```
+
+```{toctree}
+:maxdepth: 1
+:caption: Microbe ↔ Metabolite
+
+../Tutorials-Multi-Omics/micro-meta/t_micro_metabol_paired
+```
