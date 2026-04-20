@@ -150,6 +150,59 @@ def qc(adata, tresh=None):
 请确保至少提供一个别名、非空描述和类别；注册表验证会强制执行这些要求。
 提供文档字符串和代表性示例可显著提升智能体建议和自动生成代码的质量。
 
+### 让 dispatcher 出现在 `ov.report.from_anndata` 报告中
+
+`ov.report.from_anndata(adata)` 会渲染一份 HTML 管线摘要：用户跑过的每一个 `ov.*` 公开调用对应一节，包含参数、代码块、耗时和若干诊断图。整个报告**完全由** `adata.uns['_ov_provenance']` 里的 provenance 日志驱动 —— 没有被 tracked dispatcher 记录过的步骤不会出现在报告里。scanner 不再去猜 `.obsm` / `.var` / `.uns` 里藏着哪些遗迹。
+
+想让你新加的公开 dispatcher 出现在报告中，用 `@tracked(name, function)` 装饰它，并在分支里用 `note(...)` 声明运行时决定的元数据：
+
+```python
+from omicverse.report._provenance import tracked, note, pick_color_key
+
+
+@tracked('umap', 'ov.pp.umap')
+def umap(adata, **kwargs):
+    if settings.mode == 'cpu':
+        _umap(adata, **kwargs)
+        note(backend=f'omicverse({settings.mode}) · scanpy')
+    elif settings.mode == 'cpu-gpu-mixed':
+        _umap(adata, method='pumap', **kwargs)
+        note(backend=f'omicverse({settings.mode}) · pumap')
+    else:
+        ...
+        note(backend=f'omicverse({settings.mode}) · rapids')
+
+    note(viz=[{
+        'function': 'ov.pl.embedding',
+        'kwargs':   {'basis': 'X_umap',
+                     'color': pick_color_key(adata),
+                     'frameon': 'small'},
+    }])
+```
+
+**`@tracked` 替你管的基础设施：**
+
+- 壁钟计时。
+- 原始 kwargs 抓取（不帮你补 default —— 报告忠实反映用户写的代码）。
+- thread-local 嵌套栈：若此 dispatcher 被**另一个** `@tracked` dispatcher 内部调用，只有最外层的调用会生成 provenance 条目。这就是为什么 `ov.pp.qc(doublets_method='scrublet')` 只留一条 `qc` 记录，即便 qc 内部调用了 `ov.pp.scrublet`。
+- 仅在成功时记录：若函数抛异常，暂存的条目会被丢弃。
+
+**`note(**fields)` 用来补运行时决定的元数据：**
+
+- `backend=<str>`：人类可读的 backend 标签。**在真正跑的那个分支里** resolve 它，让报告能忠实区分 scanpy / RAPIDS / torch 等 —— 不要试图在装饰器参数里塞一个静态字符串，因为多 backend dispatcher（`qc` / `neighbors` / `umap` / ...）在 dispatch 之前根本不知道走哪条分支。
+- `viz=[{'function': 'ov.pl.<fn>', 'kwargs': {...}}, ...]`：一个或多个 `ov.pl.*` 调用，报告会照实执行它们作为该步骤的诊断图。每个 viz dict 会以跑完之后的 `adata` 为输入被逐字调用。优先复用现有的 `ov.pl.*` helper；如果没有合适的，先往 `omicverse/pl/` 里加一个再来 `note`。
+- 用 `note(...)` 设置的任何字段都会被合并进 provenance 条目（例如 `note(summary=f'{n_doublets} doublets flagged')`）。
+
+**经验规则：**
+
+- `@tracked` 只用在**公开、面向用户**的 dispatcher 上 —— 也就是用户会在自己代码里写的那些名字。内部 helper（`omicverse.pp._neighbors.neighbors`、`omicverse.pp._umap.umap` 等）**不要**加 tracked；它们是实现细节，而且嵌套栈本来就会把它们静音。
+- viz spec 尽量贴近实际计算处声明。如果你的 dispatcher 在两个算法之间选择，两条分支的诊断图不同（比如 `leiden` 在 `X_umap` 存在时顺手画个 embedding），就在 body 里 inline 分支：`note(viz=[..., *([...] if 'X_umap' in adata.obsm else [])])`。
+- 单算法、没什么好画的步骤，只加 `@tracked(...)` 就够了 —— 报告里照样有参数、耗时和一个 "no diagnostic plot" 占位。
+- 若 dispatcher 返回**副本**（`copy=True` 语义），装饰器会把条目写在返回的 AnnData 上而不是输入上；你不需要额外处理。
+- 已经 `@tracked` 的 body 里不要直接调 `record_step` —— 装饰器负责 emit。
+
+可参考 `omicverse/pp/_preprocess.py`（`umap` / `neighbors` / `leiden` / `pca` …）和 `omicverse/pp/_qc.py`（`qc`）的实现。这些 dispatcher 在真正的计算代码之外，每个分支只多了 2-4 行 `note(...)`，没有手动 `time.time()`、没有 `record_step(...)` 样板、也没有深度守卫簿记。
+
 ## Pull Request
 
 1. 首先需要 `fork` omicverse，然后从您的仓库 git clone 您的 fork。

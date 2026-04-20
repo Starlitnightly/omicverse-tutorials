@@ -140,6 +140,59 @@ def qc(adata, tresh=None):
 
 Be sure to provide at least one alias, a non-empty description, and a category; the registry validation enforces these requirements. Including docstrings and representative examples significantly improves the quality of agent suggestions and auto-generated code.
 
+### Making a dispatcher appear in `ov.report.from_anndata`
+
+`ov.report.from_anndata(adata)` renders a per-step HTML summary of the pipeline that produced the AnnData: for every public `ov.*` call the user ran, one section with parameters, a code block, timing, and one or more diagnostic plots. The report is driven **entirely** by a provenance log at `adata.uns['_ov_provenance']` — steps that didn't go through a tracked dispatcher simply do not appear. There is no heuristic sniffing of `.obsm` / `.var` / `.uns`.
+
+If you're adding a new public dispatcher and you want it to show up in the report, decorate it with `@tracked(name, function)` and annotate branch-dependent metadata with `note(...)`:
+
+```python
+from omicverse.report._provenance import tracked, note, pick_color_key
+
+
+@tracked('umap', 'ov.pp.umap')
+def umap(adata, **kwargs):
+    if settings.mode == 'cpu':
+        _umap(adata, **kwargs)
+        note(backend=f'omicverse({settings.mode}) · scanpy')
+    elif settings.mode == 'cpu-gpu-mixed':
+        _umap(adata, method='pumap', **kwargs)
+        note(backend=f'omicverse({settings.mode}) · pumap')
+    else:
+        ...
+        note(backend=f'omicverse({settings.mode}) · rapids')
+
+    note(viz=[{
+        'function': 'ov.pl.embedding',
+        'kwargs':   {'basis': 'X_umap',
+                     'color': pick_color_key(adata),
+                     'frameon': 'small'},
+    }])
+```
+
+**What `@tracked` does for you (infrastructure):**
+
+- Wall-clock timing.
+- Raw kwargs capture (no defaults filled in — the report records exactly what the user typed).
+- A thread-local nesting stack: if this dispatcher is invoked from *another* `@tracked` dispatcher, only the outermost call emits a provenance entry. This is how e.g. `ov.pp.qc(doublets_method='scrublet')` produces a single `qc` entry even though it internally invokes `ov.pp.scrublet`.
+- Success-only recording: on exception, the staged entry is discarded.
+
+**What `note(**fields)` is for (runtime-decided metadata):**
+
+- `backend=<str>`: a human-readable backend label. Resolve it *inside* the branch that actually ran, so the report faithfully distinguishes scanpy / RAPIDS / torch / etc. — don't try to pick a single string in a wrapping decorator call, because multi-backend dispatchers (`qc` / `neighbors` / `umap` / ...) can't know which branch will run until the dispatch is done.
+- `viz=[{'function': 'ov.pl.<fn>', 'kwargs': {...}}, ...]`: one or more `ov.pl.*` calls the report should render as diagnostic plots for this step. Each viz dict is executed verbatim against the post-run `adata`. Prefer existing `ov.pl.*` helpers; add a new helper to `omicverse/pl/` first if none fits.
+- Any other field you set with `note(...)` is merged into the provenance entry (e.g. `note(summary=f'{n_doublets} doublets flagged')`).
+
+**Rules of thumb:**
+
+- `@tracked` goes on **public, user-facing** dispatchers — the ones whose names a user types. Internal helpers (`omicverse.pp._neighbors.neighbors`, `omicverse.pp._umap.umap`, etc.) should **not** be tracked; they're implementation detail and the nesting stack would silence them anyway.
+- Declare `viz` specs as close to the actual computation as possible. If your dispatcher picks between two algorithms with different diagnostic plots (e.g. `leiden` optionally plotting an embedding when `X_umap` exists), branch on it inline: `note(viz=[..., *([...] if 'X_umap' in adata.obsm else [])])`.
+- For a single-algorithm step with no interesting plot, just `@tracked(...)` is fine — the report will show parameters, timing, and a "no diagnostic plot" placeholder.
+- If the dispatcher returns a **copy** (`copy=True` semantics), the decorator writes the entry on the returned AnnData rather than the input; you don't need to do anything special for this.
+- Never call `record_step` directly from a body you've already decorated with `@tracked` — the decorator owns the emit.
+
+For a reference, see `omicverse/pp/_preprocess.py` (`umap`, `neighbors`, `leiden`, `pca` …) and `omicverse/pp/_qc.py` (`qc`). These dispatchers are ~2-4 lines of `note(...)` per branch beyond the actual computation, with no manual `time.time()`, no `record_step(...)` boilerplate, and no depth-guard bookkeeping.
+
 ## Pull request
 
 1. You need to `fork` omicverse at first, and git clone your fork from your repository.
