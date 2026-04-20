@@ -203,6 +203,41 @@ def umap(adata, **kwargs):
 
 可参考 `omicverse/pp/_preprocess.py`（`umap` / `neighbors` / `leiden` / `pca` …）和 `omicverse/pp/_qc.py`（`qc`）的实现。这些 dispatcher 在真正的计算代码之外，每个分支只多了 2-4 行 `note(...)`，没有手动 `time.time()`、没有 `record_step(...)` 样板、也没有深度守卫簿记。
 
+#### Class-based dispatcher
+
+很多 ov 工具是把 AnnData 挂在 `self` 上的 class（`Annotation`、`AnnotationRef`、`pyDEG` 等）。给 `@tracked` 传 `adata_attr=<属性名>`，装饰器就会从 `self.<attr>` 取 AnnData，而不是默认的 `args[0]`：
+
+```python
+class Annotation:
+    def __init__(self, adata):
+        self.adata = adata
+
+    @tracked('Annotation.annotate', 'ov.single.Annotation.annotate',
+             adata_attr='adata')
+    def annotate(self, *, method='celltypist', **kwargs):
+        ...
+        note(backend=f'omicverse · method={method}',
+             viz=[{'function': 'ov.pl.embedding',
+                    'kwargs': {'basis': 'X_umap',
+                                'color': f'{method}_prediction'}}])
+```
+
+对于同时持有 query 和 reference 两个 AnnData 的参考映射类，把 `adata_attr` 指向你希望条目落在的那一个：
+
+```python
+class AnnotationRef:
+    def __init__(self, adata_query, adata_ref, ...):
+        self.adata_query = adata_query
+        self.adata_ref = adata_ref
+
+    @tracked('AnnotationRef.predict', 'ov.single.AnnotationRef.predict',
+             adata_attr='adata_query')
+    def predict(self, *, method='harmony', ...):
+        ...
+```
+
+参考实现：`omicverse/single/_annotation.py`（ref-free）和 `omicverse/single/_annotation_ref.py`（ref-based）。
+
 ## Pull Request
 
 1. 首先需要 `fork` omicverse，然后从您的仓库 git clone 您的 fork。

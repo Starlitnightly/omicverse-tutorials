@@ -193,6 +193,41 @@ def umap(adata, **kwargs):
 
 For a reference, see `omicverse/pp/_preprocess.py` (`umap`, `neighbors`, `leiden`, `pca` …) and `omicverse/pp/_qc.py` (`qc`). These dispatchers are ~2-4 lines of `note(...)` per branch beyond the actual computation, with no manual `time.time()`, no `record_step(...)` boilerplate, and no depth-guard bookkeeping.
 
+#### Class-based dispatchers
+
+Many ov tools are classes that hold the AnnData on `self` (`Annotation`, `AnnotationRef`, `pyDEG`, …). Pass `adata_attr=<attribute_name>` to `@tracked` so it pulls the AnnData from `self.<attr>` instead of `args[0]`:
+
+```python
+class Annotation:
+    def __init__(self, adata):
+        self.adata = adata
+
+    @tracked('Annotation.annotate', 'ov.single.Annotation.annotate',
+             adata_attr='adata')
+    def annotate(self, *, method='celltypist', **kwargs):
+        ...
+        note(backend=f'omicverse · method={method}',
+             viz=[{'function': 'ov.pl.embedding',
+                    'kwargs': {'basis': 'X_umap',
+                                'color': f'{method}_prediction'}}])
+```
+
+For reference-mapping classes that hold both query and reference AnnDatas, point `adata_attr` at the one you want the entry to land on:
+
+```python
+class AnnotationRef:
+    def __init__(self, adata_query, adata_ref, ...):
+        self.adata_query = adata_query
+        self.adata_ref = adata_ref
+
+    @tracked('AnnotationRef.predict', 'ov.single.AnnotationRef.predict',
+             adata_attr='adata_query')
+    def predict(self, *, method='harmony', ...):
+        ...
+```
+
+Reference: `omicverse/single/_annotation.py` (ref-free) and `omicverse/single/_annotation_ref.py` (ref-based).
+
 ## Pull request
 
 1. You need to `fork` omicverse at first, and git clone your fork from your repository.
