@@ -9,3 +9,4 @@ End-to-end 16S / amplicon analysis via `ov.alignment` — raw FASTQ → AnnData
 - [16S phylogeny — MAFFT + FastTree → Faith PD + UniFrac](t_16s_phylogeny.ipynb)
 - [DADA2 backend (pure-Python via pydada2)](t_16s_dada2.ipynb)
 - [Differential abundance: Wilcoxon vs DESeq2 vs ANCOM-BC](t_16s_da_comparison.ipynb)
+- [Cross-cohort 16S meta-analysis (combine_studies + meta_da)](t_16s_meta_analysis.ipynb)
