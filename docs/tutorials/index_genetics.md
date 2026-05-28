@@ -4,7 +4,7 @@ A systematic, best-practice **GWAS pipeline** built on the
 `omicverse.genetics` module — a unified statistical-genetics framework that
 threads genotype, expression and complex traits into one analysis.
 
-This chapter is a **two-notebook end-to-end workflow**, not a catalogue of
+This chapter is a **three-notebook end-to-end workflow**, not a catalogue of
 methods. It runs entirely on **real public data** — exposed through
 `ov.datasets` loaders — so each result is what the data actually show, and
 each step feeds the next:
