@@ -34,9 +34,19 @@ The statistical engines are the standalone R-parity packages
 and `pytwas`; the GWAS core (QC, association, genomic inflation) needs no
 backend.
 
+3. **From spatial transcriptomics to trait mapping** — spatially resolved
+   GWAS with **gsMap** on the official **MOSTA** embryo dataset
+   (`E16.5_E1S1.MOSTA.h5ad`, 121,767 spots). The pipeline learns a latent
+   representation from expression and spatial structure, maps it back to
+   gene-level specificity scores (GSS), connects pre-computed LD resources,
+   runs spatial-LDSC with real GWAS summary statistics (`IQ_NG_2018`),
+   aggregates spot-level p-values by Cauchy combination, and visualises
+   the results with native OmicVerse plotting methods.
+
 ```{toctree}
 :maxdepth: 1
 
 ../Tutorials-genetics/t_genetics_01_gwas_pipeline
 ../Tutorials-genetics/t_genetics_02_functional_followup
+../Tutorials-genetics/t_gsmap
 ```
