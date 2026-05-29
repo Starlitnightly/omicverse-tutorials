@@ -40,3 +40,7 @@ site/
 *site*/
 docs/Tutorials-space/data/
 docs/Tutorials-single/data/
+docs/Tutorials-single/batch/zoo/data/
+
+# Concord training checkpoints from the batch-zoo notebooks
+docs/Tutorials-single/batch/zoo/save/
