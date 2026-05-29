@@ -36,9 +36,12 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
   - [Preprocessing the data of scRNA-seq [GPU]](Tutorials-single/t_preprocess_gpu.ipynb)
   - [Preprocessing the data of scRNA-seq [Rust / out-of-memory]](Tutorials-single/t_preprocess_rust.ipynb)
   - [Clustering space](Tutorials-single/t_cluster.ipynb)
-  - [Data integration and batch correction](Tutorials-single/t_single_batch.ipynb)
   - [Consensus Non-negative Matrix factorization (cNMF)](Tutorials-single/t_cnmf.ipynb)
   - [Lazy analysis of scRNA-seq](Tutorials-single/t_lazy.ipynb)
+- Batch correction
+  - [Batch correction overview — backends, decision tree, schema](Tutorials-single/batch/index.md)
+  - [Recommended workflow — side-by-side comparison of all backends + scib-metrics](Tutorials-single/batch/t_single_batch.ipynb)
+  - [**Backend zoo** › Harmony · ComBat · Scanorama · scVI · scANVI · totalVI · scPoli · CellANOVA · Concord · Seurat-CCA](Tutorials-single/batch/zoo/index.md)
 - Annotation
   - [Reference-free automated single-cell cell type annotation](Tutorials-single/t_anno_noref.ipynb)
   - [Reference automated single-cell cell type annotation](Tutorials-single/t_anno_ref.ipynb)

@@ -16,9 +16,14 @@ This page mirrors the `Single` section in `mkdocs.yml`.
 - [Preprocessing the data of scRNA-seq [Rust / out-of-memory]](t_preprocess_rust.ipynb)
 - [Ambient / contamination RNA removal](t_ambient_rna.ipynb)
 - [Clustering space](t_cluster.ipynb)
-- [Data integration and batch correction](t_single_batch.ipynb)
 - [Consensus Non-negative Matrix factorization (cNMF)](t_cnmf.ipynb)
 - [Lazy analysis of scRNA-seq](t_lazy.ipynb)
+
+## Batch correction
+
+- [Batch correction overview — backends, decision tree, schema](batch/index.md)
+- [Recommended workflow — side-by-side comparison of all backends + scib-metrics](batch/t_single_batch.ipynb)
+- [**Backend zoo** › Harmony · ComBat · Scanorama · scVI · scANVI · totalVI · scPoli · CellANOVA · Concord · Seurat-CCA](batch/zoo/index.md)
 
 ## Annotation
 
