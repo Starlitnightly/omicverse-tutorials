@@ -14,6 +14,7 @@ index_airr
 index_protein
 index_mol
 index_metabol
+index_epigenetics
 index_microbiome
 index_multi_omics
 index_foundation
