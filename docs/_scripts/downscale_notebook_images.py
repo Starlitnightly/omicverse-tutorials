@@ -40,12 +40,20 @@ def _png_longest_side(raw: bytes) -> int:
     return max(w, h)
 
 
-def _shrink(b64: str, max_px: int):
-    """Return (new_b64, saved_bytes) or (b64, 0) if no gain."""
+def _shrink(b64: str, max_px: int, trigger_px: int | None = None):
+    """Return (new_b64, saved_bytes) or (b64, 0) if no gain.
+
+    Only images whose longest side exceeds ``trigger_px`` are touched; the
+    rest are left bit-for-bit untouched. ``trigger_px`` defaults to
+    ``max_px`` (cap everything above the cap). Set it higher than
+    ``max_px`` to "only compress large images" — e.g. trigger=1900,
+    max=1500 leaves ≤1900px figures alone and shrinks bigger ones to 1500.
+    """
     from PIL import Image
 
     raw = base64.b64decode(b64)
-    if _png_longest_side(raw) <= max_px:
+    trigger = trigger_px if trigger_px is not None else max_px
+    if _png_longest_side(raw) <= trigger:
         return b64, 0
     im = Image.open(io.BytesIO(raw))
     w, h = im.size
@@ -72,7 +80,7 @@ def _iter_notebooks(root: Path):
 
 def _process_one(args) -> tuple[int, int]:
     """Downscale a single notebook in place. Returns (images, bytes_saved)."""
-    path, max_px = args
+    path, max_px, trigger_px = args
     try:
         nb = json.loads(Path(path).read_text())
     except (json.JSONDecodeError, OSError):
@@ -90,7 +98,7 @@ def _process_one(args) -> tuple[int, int]:
             if isinstance(img, list):
                 img = "".join(img)
             img = img.replace("\n", "")
-            new_b64, gain = _shrink(img, max_px)
+            new_b64, gain = _shrink(img, max_px, trigger_px)
             if gain:
                 data["image/png"] = new_b64
                 imgs += 1
@@ -101,12 +109,14 @@ def _process_one(args) -> tuple[int, int]:
     return imgs, saved
 
 
-def process(root: Path, max_px: int, workers: int | None = None) -> tuple[int, int, int]:
+def process(root: Path, max_px: int, workers: int | None = None,
+            trigger_px: int | None = None) -> tuple[int, int, int]:
     paths = [str(p) for p in _iter_notebooks(root)]
     workers = workers or min(os.cpu_count() or 1, 8)
     nb_changed = imgs = saved = 0
+    tasks = [(p, max_px, trigger_px) for p in paths]
     with ProcessPoolExecutor(max_workers=workers) as ex:
-        for n_imgs, n_saved in ex.map(_process_one, [(p, max_px) for p in paths]):
+        for n_imgs, n_saved in ex.map(_process_one, tasks):
             if n_imgs:
                 nb_changed += 1
             imgs += n_imgs
@@ -121,13 +131,21 @@ def main() -> int:
                     help="cap the longest image side at this many pixels")
     ap.add_argument("--workers", type=int, default=None,
                     help="parallel worker processes (default: min(cpus, 8))")
+    ap.add_argument("--min-trigger-px", type=int, default=None,
+                    help="only downscale images whose longest side exceeds "
+                         "this (default: --max-px). Set higher than --max-px "
+                         "to compress only large figures and leave the rest "
+                         "untouched.")
     args = ap.parse_args()
     if not args.root.exists():
         print(f"downscale: root {args.root} does not exist", file=sys.stderr)
         return 1
-    nb_changed, imgs, saved = process(args.root, args.max_px, args.workers)
+    nb_changed, imgs, saved = process(args.root, args.max_px, args.workers,
+                                      args.min_trigger_px)
+    trig = args.min_trigger_px or args.max_px
     print(f"downscale: {nb_changed} notebooks, {imgs} images, "
-          f"{saved / 1048576:.1f} MB saved (cap {args.max_px}px)")
+          f"{saved / 1048576:.1f} MB saved (cap {args.max_px}px, "
+          f"trigger >{trig}px)")
     return 0
 
 
