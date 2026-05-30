@@ -35,3 +35,8 @@ anndata
 scanpy
 scipy>=1.11,<1.16
 liana
+
+# Used by docs/_scripts/downscale_notebook_images.py (pre_build figure
+# downscaling). matplotlib already pulls it in, but pin it explicitly so
+# the build-time downscale step never depends on a transitive dep.
+pillow
