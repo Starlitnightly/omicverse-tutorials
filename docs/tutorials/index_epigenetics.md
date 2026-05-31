@@ -7,8 +7,9 @@ grammar now also covers chromatin accessibility and 3D genome organisation.
 
 The **single-cell ATAC** tutorials (1–6) use small public 10x PBMC datasets that `ov.epi.datasets`
 downloads on demand, so they run end-to-end on a laptop CPU. The **Hi-C** tutorials (7–8) read
-local `.cool` / `.scool` files (provenance and accession noted in each notebook); replace the data
-path with your own to reproduce them.
+local `.cool` / `.scool` files, and the **bulk** tutorials (9–10) cover the ChIP-seq upstream
+pipeline (FASTQ → peaks) and ATAC footprinting (provenance and accession noted in each notebook;
+the ChIP one fetches its reads from Zenodo, the footprint one reads a local TOBIAS reference).
 
 ```{toctree}
 :maxdepth: 1
@@ -21,4 +22,6 @@ path with your own to reproduce them.
 ../Tutorials-epigenetics/t_epi_06_integration_label_transfer
 ../Tutorials-epigenetics/t_epi_07_bulk_hic
 ../Tutorials-epigenetics/t_epi_08_single_cell_hic
+../Tutorials-epigenetics/t_epi_09_bulk_chipseq_upstream
+../Tutorials-epigenetics/t_epi_10_bulk_footprinting
 ```
