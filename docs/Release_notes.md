@@ -1207,3 +1207,183 @@ A new top-level enrichment-scoring namespace, vendoring the decoupler 1.x algori
 - **`xgboost` CPU path for `ov.es.mdt` / `ov.es.udt`** — replaced by the pure-torch GBDT (83× / 158× faster).
 - **`possible_paths` hardcoded fallback lists** — removed in favour of explicit configuration.
 
+## v 2.2.1
+
+A large feature release: **eight brand-new top-level modules** (statistical
+genetics, bulk/single proteomics, molecular structures, epigenomics, immune
+repertoire, single-cell metabolism, extracellular-vesicle proteomics, H&E →
+spatial prediction), a rebuilt trajectory/pseudotime stack, out-of-core
+preprocessing for datasets that don't fit in RAM, and an Apple-Silicon GPU
+UMAP backend. ~190 commits since v2.2.0.
+
+### New modules
+
+- **`ov.genetics` — statistical genetics / GWAS (PRs #743, #745)** — new
+  statistical-genetics module with a systematic GWAS best-practice pipeline,
+  `simulate_gwas_study`, and `cross_trait_coloc` for shared genetic factors
+  across traits.
+- **`ov.protein` — bulk proteomics (PR #730)** — bulk-proteomics module with
+  real datasets in `ov.datasets`, pipeline plots, and the
+  `protein_pxd000279` DEqMS-vignette MaxQuant benchmark.
+- **`ov.mol` — molecular structure & drug-binding (PR #765)** — molecular
+  structure and drug-binding module.
+- **`ov.epi` — epigenomics (PR #800)** — epigenomics module wrapping
+  `epione`.
+- **`ov.airr` — immune repertoire / AIRR-seq (PRs #751, #754, #795)** —
+  immune-repertoire (AIRR-seq) module: TCR-specificity + CoNGA layers (25
+  extracted analysis functions), `extract_heavy_chains`,
+  `ov.datasets.airr_singlecell_bcr`, real AIRR datasets and a BCR tutorial.
+  `tcr_clumping` now uses a Poisson-tail p-value.
+- **`ov.single.Metabolism` + `MetaboliteCCC` — single-cell metabolism (PR
+  #764)** — single-cell metabolism and metabolite-mediated cell-cell
+  communication.
+- **`ov.single.ev` — single extracellular-vesicle proteomics (PR #759)**.
+- **`ov.space.histo` — H&E → spatial transcriptomics (PR #789)** —
+  histology-to-expression prediction; `load_breast(section=2)` for held-out
+  evaluation. (`omicverse[histo]` deps gated to python>=3.10.)
+
+### Preprocessing — out-of-core (AnnDataOOM)
+
+- **Out-of-core preprocessing for AnnData that doesn't fit in RAM (PRs #806,
+  #804, #802)** — chunked, out-of-core `filter_cells` / `filter_genes`,
+  `highly_variable_genes` (flavor-aware dispatch), and
+  `normalize_total` / `log1p` / Pearson-HVF / `regress` / `scrublet`.
+  Implicit centering via the `CenteredSparseArray` (`use_implicit_centering`).
+- **`ov.pp.ambient` — ambient / contamination-RNA removal (PR #762)**.
+- **`ov.pp.regress` custom keys (PRs #798, #799)** — community contribution
+  from @mengxu98; regress out user-specified `obs` keys.
+- **`perf(preprocess)` — fused `normalize_total` + Pearson-HVG pass-1 (PR
+  #805)** for the in-memory path.
+
+### Trajectory & pseudotime
+
+- **`PseudotimeFate` — unified terminal-state + fate downstream (PRs #787,
+  #790)** — single entry for terminal-state identification and fate analysis,
+  with `fit_lineage_trends` (CellRank-style fate-weighted GAMs) and MIRA +
+  CellRank downstream methods on the estimator.
+- **`compute_pseudotime_velocity` for streamplot rendering (PR #792)**.
+- **GRN-aware trajectory** — RegVelo GRN workflow, `StaVIA` trajectory
+  wrapper, a GRN-inference entry point, and SCENIC resource setup.
+- **`TrajInfer` dynbenchmark zoo + `omicverse[trajectory]` extras (PR
+  #786)**.
+- **VIA edge-case fixes (PRs #766, #774)** — community fixes from @mengxu98;
+  restored VIA-native boundary and several lineage-handling bugs flagged from
+  the trajectory tutorial.
+
+### Single-cell
+
+- **Unified `MetaCell` — 7 backends + mcRigor validator (PRs #703, #729)** —
+  one `MetaCell` interface across seven backends with the mcRigor validator
+  and an I/O contract on the `@register_function` decorators. Fixes to soft
+  metacell aggregation and SEACells ordering.
+- **`ov.single.pseudobulk` (PR #735)** — pseudobulk aggregation.
+- **scVI-family backends** — scANVI, totalVI, scPoli; scvi kwargs now routed
+  to `SCVI.__init__` vs `SCVI.train` by signature (PR #797).
+- **Batch-correction benchmarking** — scIB-style batch-correction zoo
+  tutorial (scIB output icons now render in the docs).
+
+### Bulk & DEG
+
+- **edgeR + limma-voom backends for `pyDEG.deg_analysis` (PR #734)** —
+  eBayes moderated-t fixes for correct variance handling.
+- **`pyDEG.continuous_deg` — DE against a continuous trait** (gains a
+  `data_type` argument: counts / continuous).
+- **`pyDEG.timecourse_deg` + `temporal_clusters` (PR #746)** — time-course
+  differential expression.
+- **Memory-bounded blockwise PyWGCNA (PR #738)** — blockwise modules for
+  large gene sets; signed scale-free fit index + sample-size fallback in
+  `pickSoftThreshold`; `cutreeHybrid` no longer crashes when every gene is
+  unassigned.
+- **Lipidomics — Bioconductor `lipidr` workflow (PR #741)**.
+
+### Perturbation
+
+- **`ov.single.perturb` — unified KO/OE + downstream GRN (PR #739)** — single
+  knock-out / over-expression interface with downstream GRN analysis.
+- **In-silico perturbation (PRs #781, #784)** — in-silico perturbation
+  workflow on the real scTenifold API (`sctenifoldknk` now uses the genuine
+  scTenifold backend). *Tutorial:* `t_perturb_in_silico`.
+
+### Spatial
+
+- **gsMap — spatially-resolved GWAS → cell-type mapping** — integration of
+  the gsMap workflow (`latent_to_gene` and friends), wired into the localized
+  READMEs with a dedicated tutorial.
+- **Spatial-LDSC** — heritability-partitioning persistence: p-values are now
+  saved, with plotting polish and a single overall `tqdm` progress bar
+  (restored after a regression) across the LDSC sweep.
+- **`ov.space.histo`** — see *New modules* (H&E → spatial transcriptomics).
+
+### GPU & performance
+
+- **GPU non-parametric UMAP backend — `ov.utils.gpuex.umap` (PR #812)** — a
+  GPU/Apple-Silicon (MLX/metal) twin of umap-learn's non-parametric
+  `simplicial_set_embedding`, structurally equivalent to the CPU path
+  (`backend='auto'|'torch'|'mlx'`). Fixes the previous parametric-UMAP
+  inconsistency on GPU.
+- **`ov.es.ucell` — Mann-Whitney U signature scoring (CPU + GPU)**.
+
+### Alignment / I/O
+
+- **simpleaf / salmon / alevin-fry scRNA-seq backend (PRs #750, #758)**.
+- **`align_samples` reads non-h5ad HDF5 matrices (PR #753)**.
+
+### Enrichment
+
+- **`geneset_prepare` auto-downloads any Enrichr library on demand**;
+  enrichment entry points accept geneset names or paths (PR #755).
+
+### Plotting
+
+- **`ov.pl.funky_heatmap` (PR #776)** — pyfunkyheatmap wrapper, registered
+  with `@register_function`, with tutorial and Sphinx toctree wiring.
+- **Dynamic lineage trends** — preserve all lineage categories,
+  legend-only-lines, group-palette line colours; small lineage-edge guards.
+- **Trajectory animation / GIF helpers** — auto-compress saved GIFs and trim
+  the stationary tail; frameless GIFs with locked data limits (used by the
+  MIRA `plot_stream` trajectory tutorials).
+
+### Datasets
+
+- **Real proteomics datasets** in `ov.datasets` (incl. the `protein_pxd000279`
+  / PXD000279 MaxQuant benchmark) backing the new `ov.protein` module.
+- **`ov.datasets.airr_singlecell_bcr`** — single-cell BCR dataset for the
+  `ov.airr` tutorials.
+- **`load_breast(section=2)`** — held-out section for evaluating the
+  `ov.space.histo` H&E → expression models.
+
+### Registry / Agent
+
+- **Register all public functions in `ov._registry`** — broad backfill so
+  the new modules (genetics, protein, mol, epi, airr, metabolism, ev, histo)
+  are discoverable from `ov.Agent`.
+- **I/O contract on metacell `@register_function` decorators** — metacell
+  backends declare their read/write shape to the registry.
+- **`ov._monitor` — FAILED summary when the wrapped function raises (PR
+  #813)** instead of a success-styled 0.0s no-op box.
+
+### Documentation & tutorials
+
+- **New tutorials** for the release's modules: 5 real-data proteomics
+  notebooks, DE on the real PXD000279 benchmark, the HE-zoo (H&E →
+  expression) and trajectory-fate zoos, batch-correction zoo, gsMap,
+  bulk ChIP / footprint, epigenetics (`ov.epi`), `ov.es.ucell`, the GWAS
+  best-practice pipeline, and `t_perturb_in_silico`.
+- **Tutorial slimming** — `t_traj_fate` notebook 51 MB → 6 MB; downscaled /
+  build-safe figures; inline MIRA-exact trace GIFs.
+- **ReadtheDocs build resilience (PRs #768–#771)** — fixed malformed RST /
+  docstrings (incl. `omicverse.single.hematopoiesis`) that were crashing
+  `sphinx_autodoc_typehints`; parallel Sphinx build (`-j auto`); guide URL
+  moved to the `omicverse` org.
+
+### Bug fixes
+
+- **#736** — dropped private scanpy-internal imports (PR #744).
+- Lazy-import torch / trim unused optional deps; expose CEFCON helpers
+  without torch.
+- **Ro/e** — formula made internally consistent and statistically sound.
+- **CI** — numpy 2 / jax compatibility (PR #811); metacell architecture
+  tests; per-test event loops; `ov.channel` core event-loop fix.
+- Dynamic-heatmap per-lineage fixes; suppress categorical embedding cmap
+  warning.
+
