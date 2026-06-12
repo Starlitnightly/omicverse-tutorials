@@ -1387,3 +1387,76 @@ UMAP backend. ~190 commits since v2.2.0.
 - Dynamic-heatmap per-lineage fixes; suppress categorical embedding cmap
   warning.
 
+
+## v 2.2.2
+
+### ⚠️ Breaking changes
+- **inferCNV now requires a platform.** `ov.single.CNV(method='infercnv').run()`
+  needs `platform='10x'` (gene-filter cutoff 0.1) or `platform='smartseq2'`
+  (cutoff 1.0), or an explicit `cutoff=` — otherwise it raises a clear
+  `ValueError`. The previous implicit default silently over-/under-filtered
+  genes (PR #822).
+- **Vendored `gseapy` removed.** GSEA and over-representation analysis are now
+  native to omicverse; `ov.bulk` no longer imports `gseapy` or
+  `PyComplexHeatmap` (PR #836).
+
+### Bulk & Enrichment
+- **From-scratch GSEA/ORA backend — `gseapy` removed (PR #836).**
+  `ov.bulk.pyGSEA` / `geneset_enrichment_GSEA` now use a single-process,
+  vectorised NumPy pre-ranked GSEA (Subramanian 2005 — the
+  clusterProfiler/fgsea algorithm), eliminating the joblib/`loky`
+  process-pool **dead-lock** that hung GSEA in notebooks and agent kernels.
+  Enrichment scores are bit-exact vs gseapy (ES Pearson r = 1.0), ~5× faster
+  with an argsort-once permutation null and `tqdm` progress bars.
+  Over-representation (`geneset_enrichment`) is now a local hypergeometric
+  test (`scipy.stats.hypergeom` + Benjamini-Hochberg), resolved and cached
+  **offline** — no Enrichr web API. `geneset_prepare` caches downloaded
+  libraries under `./genesets/`.
+- **`geneset_plot_multi` rendered with Marsilea** instead of PyComplexHeatmap
+  (sized dot-heatmap: dot size = gene count, colour = -log10 adjusted-p, rows
+  split by group) (PR #836).
+
+### Single-cell
+- **`ov.single.Augur` — cell-type prioritization (PR #825).** Integration of
+  py-Augur: ranks cell types by how strongly their transcriptome responds to a
+  perturbation (AUC for classification, Lin's concordance correlation for
+  regression / RNA-velocity mode).
+- **CNV heatmap & inferCNV (PR #822).** Fixed `ov.pl.cnv_heatmap` chromosome
+  tiling; optional p/q **arm splitting**; surfaced inferCNV **phase 2/3**
+  (HMM state calling + Bayesian filtering) outputs; platform/cutoff guard
+  (see Breaking changes).
+
+### Spatial
+- **`ov.space` SPLIT purification workflow (PR #828).** AnnData-native SPLIT
+  (py-SPLIT) for purifying mixed spatial-transcriptomics signal.
+
+### Preprocessing & reproducibility
+- **`ov.set_seed` — global random seed (PRs #807, #820).** One call propagates
+  the seed through PCA / neighbors / UMAP / Leiden / t-SNE for reproducible
+  runs.
+- **Unified QC workflow (PRs #808, #819).** Consistent `ov.pp` QC-metric
+  computation + `ov.pl.qc` plotting + filtering in one compute/plot/filter
+  flow.
+- **Parametric UMAP returns a reusable model (PRs #809, #821).**
+  `model = ov.pp.umap(adata, method='pumap')` returns the trained model so new
+  data can be projected into the same embedding; tutorial included.
+
+### Plotting
+- **UpSet plots — `ov.pl` (PR #823).**
+
+### AIRR
+- **Custom clone-size bins in `clonal_expansion` (PRs #810, #818).**
+
+### Bug fixes & compatibility
+- **matplotlib ≥3.9** — replaced the removed `matplotlib.cm.get_cmap` across
+  VIA with `plt.get_cmap` (PR #836).
+- **NumPy 2** — pyscenic no longer uses the removed `np.msort` (PR #829).
+- **COSG dotplot** — handle marker-list length mismatches (PR #830).
+- **flowsig** — squidpy imports work without `pkg_resources` (PR #832).
+- **PyG neighbors** — normalize CUDA device specs (PR #833).
+- **CI** — avoid `uv run` dependency-resolution issues (PR #824).
+
+### Documentation
+- **`t_infercnv` tutorial** updated to pass `platform='smartseq2'` for the
+  Smart-seq2 Maynard 2020 dataset (tutorials #81).
+- New **parametric-UMAP model** tutorial; guide submodule pointer bumped.
