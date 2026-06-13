@@ -1460,3 +1460,23 @@ UMAP backend. ~190 commits since v2.2.0.
 - **`t_infercnv` tutorial** updated to pass `platform='smartseq2'` for the
   Smart-seq2 Maynard 2020 dataset (tutorials #81).
 - New **parametric-UMAP model** tutorial; guide submodule pointer bumped.
+
+## v 2.2.3
+
+Patch release on top of 2.2.2.
+
+### Bug fixes
+- **Registry hydration on first lookup (PR #839).** A fresh `import omicverse`
+  populated the function registry only with whatever modules happened to
+  import eagerly, so `ov.Agent` / `ov._registry.find(...)` saw a near-empty
+  registry. The first query now force-imports all OmicVerse submodules once
+  (memoized via a `_hydrated` flag, set before hydrating to guard against
+  re-entrancy; failures fall back to the partial registry rather than
+  crashing the lookup). The runtime scanner gates on this hydration memo
+  instead of on registry-emptiness.
+
+### Infrastructure
+- **Tag-triggered PyPI publishing** — pushing a `vX.Y.Z` tag now builds and
+  publishes to PyPI via GitHub Actions (`.github/workflows/publish-pypi.yml`,
+  PyPI trusted publishing / OIDC), replacing the manual
+  `python -m build` / `twine upload` flow.
