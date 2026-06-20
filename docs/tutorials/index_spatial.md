@@ -5,6 +5,7 @@ Tutorials for spatial data preprocessing, clustering, deconvolution, downstream 
 ```{toctree}
 :maxdepth: 2
 
+index_spatial_spata2
 index_spatial_preprocessing
 index_spatial_clustering
 index_spatial_deconvolution
