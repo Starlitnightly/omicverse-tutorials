@@ -1,6 +1,6 @@
 ## SPATA2-style utilities
 
-- [SPATA2 ?? AnnData ??](t_spata2py.ipynb) ? ???????????????????????????benchmark ? `py-SPATA2` namespace parity ???
+- [SPATA2-style AnnData utilities](t_spata2py.ipynb) - coordinate tables, variable joins, tissue outlines, spatial outlier filtering, unit conversion, benchmark, and py-SPATA2 namespace parity status.
 
 # 空间转录组学教程
 
