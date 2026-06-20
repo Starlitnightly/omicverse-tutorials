@@ -2,6 +2,10 @@
 
 This page mirrors the `Space` section in `mkdocs.yml` and provides a markdown entry point for the spatial tutorial notebooks.
 
+## SPATA2-style utilities
+
+- [SPATA2-style AnnData utilities](t_spata2py.ipynb)
+
 ## Preprocess
 
 - [Crop and Rotation of spatial transcriptomic data](t_crop_rotate.ipynb)
