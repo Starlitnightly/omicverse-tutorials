@@ -4,7 +4,7 @@ This page mirrors the `Space` section in `mkdocs.yml` and provides a markdown en
 
 ## SPATA2-style utilities
 
-- [SPATA2-style AnnData utilities](t_spata2py.ipynb)
+- [SPATA2-style AnnData utilities](t_spata2py.ipynb) ? coordinate tables, variable joins, tissue outlines, spatial outlier filtering, unit conversion, benchmark, and namespace-parity status for the `py-SPATA2` rewrite.
 
 ## Preprocess
 
