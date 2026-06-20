@@ -1,0 +1,9 @@
+# SPATA2 ??????
+
+AnnData-native SPATA2 ?????
+
+```{toctree}
+:maxdepth: 1
+
+../Tutorials-space/t_spata2py
+```
