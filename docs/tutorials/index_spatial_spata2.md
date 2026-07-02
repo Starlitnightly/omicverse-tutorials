@@ -1,6 +1,6 @@
-# SPATA2-style utilities
+# SPATA2-inspired utilities
 
-AnnData-native SPATA2 reconstruction tutorials.
+AnnData-native spatial utility tutorials inspired by SPATA2 workflows.
 
 ```{toctree}
 :maxdepth: 1

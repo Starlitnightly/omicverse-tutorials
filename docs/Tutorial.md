@@ -91,7 +91,7 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
 
 ## Spatial Transcriptomics
 
-- [SPATA2-style AnnData utilities](Tutorials-space/t_spata2py.ipynb)
+- [SPATA2-inspired AnnData spatial utilities](Tutorials-space/t_spata2py.ipynb)
 - [Space tutorial overview](Tutorials-space/index.md)
 - Preprocess
   - [Crop and Rotation of spatial transcriptomic data](Tutorials-space/t_crop_rotate.ipynb)

@@ -2,9 +2,9 @@
 
 This page mirrors the `Space` section in `mkdocs.yml` and provides a markdown entry point for the spatial tutorial notebooks.
 
-## SPATA2-style utilities
+## SPATA2-inspired utilities
 
-- [SPATA2-style AnnData utilities](t_spata2py.ipynb) - coordinate tables, variable joins, tissue outlines, spatial outlier filtering, unit conversion, benchmark, and namespace-parity status for the `py-SPATA2` rewrite.
+- [SPATA2-inspired AnnData spatial utilities](t_spata2py.ipynb) - coordinate tables, variable joins, tissue outlines, spatial outlier filtering, unit conversion, benchmark, and a clear note that this is not full SPATA2 parity.
 
 ## Preprocess
 

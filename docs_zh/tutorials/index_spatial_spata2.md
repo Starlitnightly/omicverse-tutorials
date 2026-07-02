@@ -1,6 +1,6 @@
-# SPATA2 ??????
+# 受 SPATA2 启发的工具
 
-AnnData-native SPATA2 ?????
+受 SPATA2 工作流启发的 AnnData-native 空间工具教程。
 
 ```{toctree}
 :maxdepth: 1

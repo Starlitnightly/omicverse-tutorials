@@ -1,6 +1,6 @@
-## SPATA2-style utilities
+## 受 SPATA2 启发的工具
 
-- [SPATA2-style AnnData utilities](t_spata2py.ipynb) - coordinate tables, variable joins, tissue outlines, spatial outlier filtering, unit conversion, benchmark, and py-SPATA2 namespace parity status.
+- [受 SPATA2 启发的 AnnData 空间工具](t_spata2py.ipynb) - 坐标表、变量拼接、组织轮廓、空间离群点过滤、单位换算、benchmark，并明确说明这不是完整 SPATA2 parity。
 
 # 空间转录组学教程
 
