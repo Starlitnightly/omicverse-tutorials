@@ -29,6 +29,7 @@ network re-solves its yield.*
 
 - [Case study I — an *E. coli* succinate cell factory](t_synbio_case01_succinate.ipynb) — a real metabolic-engineering project: diagnose, strain-design (FSEOF + OptKnock), verify, check thermodynamics (eQuilibrator + MDF), enzyme k_cat, and build.
 - [Case study II — engineering a more thermostable DHFR](t_synbio_case02_dhfr_engineering.ipynb) — a real protein-engineering campaign on *E. coli* DHFR: CLEAN function, ESMFold, ESM fitness + ThermoMPNN stability landscapes, stabilised-variant design, and build.
+- [Case study III — evaluating a protein design (does it get *better*?)](t_synbio_case03_dhfr_evaluation.ipynb) — score a DHFR variant with an in-silico metric panel (`evaluate_design`): a 3D WT-vs-variant structural overlay (`view_superposition` + self-consistency `structure_rmsd`), plus foldability / EC-retention / ΔΔG / ESM-fitness / kcat — each tagged with its **reliability**, and an honest read of what the numbers do and don't prove.
 
 ## Installation
 
