@@ -140,6 +140,11 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
 - [Binding-pocket detection & druggability (fpocket)](Tutorials-mol/t_mol_druggability.ipynb)
 - [Molecular docking with AutoDock Vina](Tutorials-mol/t_mol_docking.ipynb)
 
+## Synthetic Biology
+
+- [Synthetic biology tutorial index](Tutorials-synbio/index.md)
+- [Synthetic biology with `ov.synbio` — from metabolism to enzyme to DNA](Tutorials-synbio/t_synbio_01_intro.ipynb) — metabolic FBA / strain design, ESMFold + ESM + ProteinMPNN protein design, codon & primer design, and the enzyme→yield A↔B coupling
+
 ## Metabolomics
 
 - [Metabolomics tutorial index](Tutorials-metabol/index.md)
