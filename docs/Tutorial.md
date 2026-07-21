@@ -140,6 +140,15 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
 - [Binding-pocket detection & druggability (fpocket)](Tutorials-mol/t_mol_druggability.ipynb)
 - [Molecular docking with AutoDock Vina](Tutorials-mol/t_mol_docking.ipynb)
 
+## Synthetic Biology
+
+- [Synthetic biology tutorial index](Tutorials-synbio/index.md)
+- [Synthetic biology with `ov.synbio` — from metabolism to enzyme to DNA](Tutorials-synbio/t_synbio_01_intro.ipynb) — metabolic FBA / strain design, ESMFold + ESM + ProteinMPNN protein design, codon & primer design, and the enzyme→yield A↔B coupling
+- [Circuits, CRISPR, assembly & pathway design](Tutorials-synbio/t_synbio_02_circuits_to_pathways.ipynb) — genetic-circuit ODE/stochastic simulation, RBS/promoter strength, CRISPR guides, Golden Gate/Gibson assembly, MDF thermodynamics, retrosynthesis, library design
+- [CRISPR editing & directed-evolution libraries](Tutorials-synbio/t_synbio_03_crispr_library.ipynb) — gRNA design + off-target CFD scoring, base editing, HDR knock-in, degenerate-codon / DMS libraries, ESM-guided directed evolution
+- [Case study I — E. coli succinate cell factory](Tutorials-synbio/t_synbio_case01_succinate.ipynb) — real metabolic engineering end-to-end
+- [Case study II — engineering a thermostable DHFR](Tutorials-synbio/t_synbio_case02_dhfr_engineering.ipynb) — real enzyme engineering end-to-end
+
 ## Metabolomics
 
 - [Metabolomics tutorial index](Tutorials-metabol/index.md)

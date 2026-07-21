@@ -1,0 +1,41 @@
+# Tutorials of Synthetic Biology
+
+Tutorials for the `omicverse.synbio` module — a self-contained **three-layer
+design stack** that bridges metabolism, protein/enzyme engineering, and DNA:
+
+- **Layer A — metabolic networks** (CPU, COBRApy): load genome-scale models,
+  FBA / FVA / pFBA, gene-deletion scans, strain design (FSEOF + growth-coupled
+  knockouts), and enzyme-constrained (GECKO-light) models.
+- **Layer B — proteins & enzymes** (GPU, ESM / ProteinMPNN): ESMFold structure
+  prediction, ESM-2 embeddings, zero-shot variant effect (in-silico directed
+  evolution), ProteinMPNN inverse design, thermostability ΔΔG, and k_cat /
+  EC-number prediction.
+- **Layer C — DNA** (CPU, DNAchisel / primer3): codon optimization and PCR
+  primer design.
+
+The differentiator is the **A↔B hinge** — predict a turnover number from an
+enzyme's sequence, push it into a genome-scale model as an enzyme-capacity
+constraint, and re-solve the achievable yield. *Edit the enzyme → the metabolic
+network re-solves its yield.*
+
+## Getting started
+
+- [Synthetic biology with `ov.synbio` — from metabolism to enzyme to DNA](t_synbio_01_intro.ipynb) — a single end-to-end tour of the metabolism/protein/DNA core on real data (`e_coli_core`, the GB1 domain, *E. coli* PfkA), closing with the A↔B coupling.
+- [Circuits, CRISPR, assembly & pathway design](t_synbio_02_circuits_to_pathways.ipynb) — the rest of the design-build-test-learn cycle: genetic-circuit simulation (toggle / repressilator), regulatory-element strength, CRISPR guide design, Golden Gate assembly, pathway thermodynamics (MDF) & retrosynthesis, and library design.
+- [CRISPR editing & directed-evolution libraries](t_synbio_03_crispr_library.ipynb) — guide-RNA design + off-target specificity (CFD), base editing & HDR knock-in, degenerate-codon / DMS libraries, and ESM model-guided variant design.
+
+### Worked case studies
+
+- [Case study I — an *E. coli* succinate cell factory](t_synbio_case01_succinate.ipynb) — a real metabolic-engineering project: diagnose, strain-design (FSEOF + OptKnock), verify, check thermodynamics (eQuilibrator + MDF), enzyme k_cat, and build.
+- [Case study II — engineering a more thermostable DHFR](t_synbio_case02_dhfr_engineering.ipynb) — a real protein-engineering campaign on *E. coli* DHFR: CLEAN function, ESMFold, ESM fitness + ThermoMPNN stability landscapes, stabilised-variant design, and build.
+
+## Installation
+
+```bash
+pip install 'omicverse[synbio]'
+```
+
+The GPU protein models reuse omicverse's existing PyTorch dependency and
+download weights on first use to `~/.omicverse/synbio_weights` (override with
+`OMICOS_SYNBIO_WEIGHTS`). All backends are optional and gated behind actionable
+errors, so `import omicverse` never requires them.
