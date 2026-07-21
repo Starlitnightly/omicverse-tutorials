@@ -24,6 +24,11 @@ network re-solves its yield.*
 - [Circuits, CRISPR, assembly & pathway design](t_synbio_02_circuits_to_pathways.ipynb) — the rest of the design-build-test-learn cycle: genetic-circuit simulation (toggle / repressilator), regulatory-element strength, CRISPR guide design, Golden Gate assembly, pathway thermodynamics (MDF) & retrosynthesis, and library design.
 - [CRISPR editing & directed-evolution libraries](t_synbio_03_crispr_library.ipynb) — guide-RNA design + off-target specificity (CFD), base editing & HDR knock-in, degenerate-codon / DMS libraries, and ESM model-guided variant design.
 
+### Worked case studies
+
+- [Case study I — an *E. coli* succinate cell factory](t_synbio_case01_succinate.ipynb) — a real metabolic-engineering project: diagnose, strain-design (FSEOF + OptKnock), verify, check thermodynamics (eQuilibrator + MDF), enzyme k_cat, and build.
+- [Case study II — engineering a more thermostable DHFR](t_synbio_case02_dhfr_engineering.ipynb) — a real protein-engineering campaign on *E. coli* DHFR: CLEAN function, ESMFold, ESM fitness + ThermoMPNN stability landscapes, stabilised-variant design, and build.
+
 ## Installation
 
 ```bash

@@ -28,6 +28,8 @@ phosphofructokinase — and closes with the A↔B coupling.
 ../Tutorials-synbio/t_synbio_01_intro
 ../Tutorials-synbio/t_synbio_02_circuits_to_pathways
 ../Tutorials-synbio/t_synbio_03_crispr_library
+../Tutorials-synbio/t_synbio_case01_succinate
+../Tutorials-synbio/t_synbio_case02_dhfr_engineering
 ```
 
 ## Installation
