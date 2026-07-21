@@ -16,6 +16,10 @@
 - [共识非负矩阵分解 (cNMF)](t_cnmf.ipynb)
 - [scRNA-seq 的懒惰分析](t_lazy.ipynb)
 
+## 跨物种整合
+
+- [基于同源基因的跨物种整合(Ensembl BioMart + Harmony/scVI)](t_cross_species.ipynb)
+
 ## 注释
 
 - [无参考自动单细胞细胞类型注释](t_anno_noref.ipynb)
