@@ -146,8 +146,10 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
 - [Synthetic biology with `ov.synbio` — from metabolism to enzyme to DNA](Tutorials-synbio/t_synbio_01_intro.ipynb) — metabolic FBA / strain design, ESMFold + ESM + ProteinMPNN protein design, codon & primer design, and the enzyme→yield A↔B coupling
 - [Circuits, CRISPR, assembly & pathway design](Tutorials-synbio/t_synbio_02_circuits_to_pathways.ipynb) — genetic-circuit ODE/stochastic simulation, RBS/promoter strength, CRISPR guides, Golden Gate/Gibson assembly, MDF thermodynamics, retrosynthesis, library design
 - [CRISPR editing & directed-evolution libraries](Tutorials-synbio/t_synbio_03_crispr_library.ipynb) — gRNA design + off-target CFD scoring, base editing, HDR knock-in, degenerate-codon / DMS libraries, ESM-guided directed evolution
+- [Advanced SOTA — mRNA design, de-novo binders, prime editing](Tutorials-synbio/t_synbio_04_advanced.ipynb) — LinearDesign mRNA, RNA/siRNA/antisense design, prime editing (PrimeDesign), CRISPRi/a & Cas13, dynamic FBA, minimal cut sets, retrobiosynthesis, and the full de-novo binder pipeline (RFdiffusion → ProteinMPNN → Boltz-2)
 - [Case study I — E. coli succinate cell factory](Tutorials-synbio/t_synbio_case01_succinate.ipynb) — real metabolic engineering end-to-end
 - [Case study II — engineering a thermostable DHFR](Tutorials-synbio/t_synbio_case02_dhfr_engineering.ipynb) — real enzyme engineering end-to-end
+- [Case study III — evaluating a protein design](Tutorials-synbio/t_synbio_case03_dhfr_evaluation.ipynb) — score a DHFR variant with the `evaluate_design` scorecard + 3D WT-vs-variant overlay (self-consistency RMSD), each metric reliability-tagged
 
 ## Metabolomics
 
