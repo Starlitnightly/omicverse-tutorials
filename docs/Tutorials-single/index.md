@@ -25,6 +25,10 @@ This page mirrors the `Single` section in `mkdocs.yml`.
 - [Recommended workflow — side-by-side comparison of all backends + scib-metrics](batch/t_single_batch.ipynb)
 - [**Backend zoo** › Harmony · ComBat · Scanorama · scVI · scANVI · totalVI · scPoli · CellANOVA · Concord · Seurat-CCA](batch/zoo/index.md)
 
+## Cross-species integration
+
+- [Cross-species integration via orthologs (Ensembl BioMart + Harmony/scVI)](t_cross_species.ipynb)
+
 ## Annotation
 
 - [Reference-free automated single-cell cell type annotation](t_anno_noref.ipynb)
