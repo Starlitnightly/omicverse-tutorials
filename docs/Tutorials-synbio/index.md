@@ -20,7 +20,8 @@ network re-solves its yield.*
 
 ## Getting started
 
-- [Synthetic biology with `ov.synbio` — from metabolism to enzyme to DNA](t_synbio_01_intro.ipynb) — a single end-to-end tour of all three layers on real data (`e_coli_core`, the GB1 domain, *E. coli* PfkA), closing with the A↔B coupling.
+- [Synthetic biology with `ov.synbio` — from metabolism to enzyme to DNA](t_synbio_01_intro.ipynb) — a single end-to-end tour of the metabolism/protein/DNA core on real data (`e_coli_core`, the GB1 domain, *E. coli* PfkA), closing with the A↔B coupling.
+- [Circuits, CRISPR, assembly & pathway design](t_synbio_02_circuits_to_pathways.ipynb) — the rest of the design-build-test-learn cycle: genetic-circuit simulation (toggle / repressilator), regulatory-element strength, CRISPR guide design, Golden Gate assembly, pathway thermodynamics (MDF) & retrosynthesis, and library design.
 
 ## Installation
 

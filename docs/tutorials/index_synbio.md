@@ -26,6 +26,7 @@ phosphofructokinase — and closes with the A↔B coupling.
 :maxdepth: 1
 
 ../Tutorials-synbio/t_synbio_01_intro
+../Tutorials-synbio/t_synbio_02_circuits_to_pathways
 ```
 
 ## Installation
