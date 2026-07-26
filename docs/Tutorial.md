@@ -123,6 +123,16 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
 - [TCR specificity — TCRdist, GLIPH2, meta-clonotypes, VDJdb annotation](Tutorials-airr/t_airr_04_tcr.ipynb)
 - [Joint TCR + gene-expression analysis (CoNGA-style)](Tutorials-airr/t_airr_05_tcr_gex.ipynb)
 
+## Flow Cytometry
+
+- [Flow cytometry tutorial index](Tutorials-flow/index.md)
+- [**Case study — immunophenotyping PBMC after cardiac arrest**](Tutorials-flow/t_flow_06_case_study.ipynb) — start here: one complete analysis on real published data in short `ov.*` calls, including the QC step that catches a failed stain
+- [Reading FCS, compensation and display scales](Tutorials-flow/t_flow_01_reading_and_compensation.ipynb) — `ov.io.read_fcs`, the spillover matrix and what it does to a plot, and why compensated data needs a biexponential (logicle / hyperlog) axis rather than a log one
+- [Gates, the gating strategy, and reading the numbers](Tutorials-flow/t_flow_02_gating.ipynb) — the five Gating-ML gate geometries, the strategy tree, `stats()` with its `low_n` warning, quadrant plots, the hierarchy, and back-gating
+- [Saving a strategy and applying it to a batch](Tutorials-flow/t_flow_03_gatingml.ipynb) — Gating-ML 2.0 round-trip (the ISAC standard FlowJo / Cytobank / flowCore read), one strategy across three samples, and diffing two strategies
+- [FlowSOM — and what clustering does not replace](Tutorials-flow/t_flow_04_flowsom.ipynb) — pure-numpy FlowSOM shown working, and shown failing in the way it fails when the gating is skipped
+- [The whole module on real data](Tutorials-flow/t_flow_05_real_data.ipynb) — two published CC-BY-4.0 experiments (BD LSRFortessa with a real 13x13 spillover matrix; Cytek Aurora with FSC-H and CD19): `$PnR` instead of a hard-coded top of scale, fitting logicle `W` to real detector noise, and a pooled 40% that turns out to be one sample's failed stain
+
 ## Proteomics
 
 - [Proteomics tutorial index](Tutorials-protein/index.md)
