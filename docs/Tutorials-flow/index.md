@@ -28,6 +28,12 @@ strategy across ninety samples — follows from that.
 
 ## The series
 
+**Start here if you are new:**
+
+- [Case study — immunophenotyping PBMC after cardiac arrest](t_flow_06_case_study.ipynb) — one complete analysis on real published data, from FCS file to a defensible number. Every code cell is three or four `ov.*` calls; the reasoning is in the text. Includes the QC step that catches a sample whose CD4 stain failed — and what to do about it.
+
+**The mechanics, in order:**
+
 - [Reading FCS, compensation and display scales](t_flow_01_reading_and_compensation.ipynb) — `ov.io.read_fcs` and what lands in the `AnnData`; the spillover matrix and what it does to a plot; why a log axis cannot display compensated data, and how logicle's `W` parameter is chosen.
 - [Gates, the gating strategy, and reading the numbers](t_flow_02_gating.ipynb) — the five gate geometries, the strategy tree, parent-restricted evaluation, `stats()` and its `low_n` warning, the quadrant plot, the hierarchy, and back-gating as the check that catches a bad gate.
 - [Saving a strategy and applying it to a batch](t_flow_03_gatingml.ipynb) — round-tripping through a dict and through **Gating-ML 2.0** (the ISAC interchange standard that FlowJo, Cytobank and flowCore read), one strategy over three samples, and diffing two strategies.

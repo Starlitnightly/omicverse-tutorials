@@ -2,6 +2,8 @@
 
 Tutorials for the `omicverse.flow` module — flow, spectral and mass cytometry.
 
+**New to `ov.flow`? Start with the [case study](../Tutorials-flow/t_flow_06_case_study.ipynb)** — one complete analysis on real published data, in short `ov.*` calls with the reasoning in the text.
+
 An event is a cell, but nothing else transfers from single-cell RNA-seq. The
 file format is FCS; the value a detector reports is contaminated by every other
 fluorochrome in the panel; the axis you look at is a nonlinear display scale;
@@ -37,6 +39,7 @@ CC-BY-4.0 experiments downloaded from their original repositories.
 ../Tutorials-flow/t_flow_03_gatingml
 ../Tutorials-flow/t_flow_04_flowsom
 ../Tutorials-flow/t_flow_05_real_data
+../Tutorials-flow/t_flow_06_case_study
 ```
 
 ## Installation
