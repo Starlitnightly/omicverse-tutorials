@@ -32,9 +32,11 @@ strategy across ninety samples — follows from that.
 - [Gates, the gating strategy, and reading the numbers](t_flow_02_gating.ipynb) — the five gate geometries, the strategy tree, parent-restricted evaluation, `stats()` and its `low_n` warning, the quadrant plot, the hierarchy, and back-gating as the check that catches a bad gate.
 - [Saving a strategy and applying it to a batch](t_flow_03_gatingml.ipynb) — round-tripping through a dict and through **Gating-ML 2.0** (the ISAC interchange standard that FlowJo, Cytobank and flowCore read), one strategy over three samples, and diffing two strategies.
 - [FlowSOM — and what clustering does not replace](t_flow_04_flowsom.ipynb) — the cytometry-standard unsupervised method in pure numpy, shown working *and* shown failing in the specific way it fails when the gating is skipped.
+- [The whole module on real data](t_flow_05_real_data.ipynb) — two real, published, CC-BY-4.0 experiments: a BD LSRFortessa PBMC panel with a genuine 13x13 spillover matrix, and a Cytek Aurora spectral panel with the FSC-H a singlet gate needs. Covers what only real data can teach: `$PnR` rather than a hard-coded top of scale, fitting the logicle `W` to the detector noise, and a pooled frequency that turns out to be one sample's failed stain.
 
-Every notebook writes its own synthetic FCS file, so none of them needs data of
-your own, and each one stands alone.
+Notebooks 01-04 write their own simulated FCS file, so they need no data of your
+own and each stands alone. Notebook 05 downloads its two datasets from Zenodo and
+PLOS on first use.
 
 ## Installation
 

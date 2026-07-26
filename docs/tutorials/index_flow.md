@@ -24,9 +24,10 @@ batch, and drawing the gate on the right axis all follow from that one decision.
 | **clustering** | `flowsom`, `SOM`, `som_metacluster` |
 | **plots** | `biaxial`, `histogram`, `backgate`, `hierarchy`, `spillover_heatmap`, `flowsom_heatmap` |
 
-Each notebook writes its own synthetic FCS file — nine known populations, a real
-`$SPILLOVER` keyword and a noise floor that goes negative — so every one of them
-runs with no data of your own.
+Notebooks 01-04 write their own simulated FCS file — nine known populations, a
+real `$SPILLOVER` keyword and a noise floor that goes negative — so they run with
+no data of your own. Notebook 05 runs the same module on two real, published,
+CC-BY-4.0 experiments downloaded from their original repositories.
 
 ```{toctree}
 :maxdepth: 1
@@ -35,6 +36,7 @@ runs with no data of your own.
 ../Tutorials-flow/t_flow_02_gating
 ../Tutorials-flow/t_flow_03_gatingml
 ../Tutorials-flow/t_flow_04_flowsom
+../Tutorials-flow/t_flow_05_real_data
 ```
 
 ## Installation
