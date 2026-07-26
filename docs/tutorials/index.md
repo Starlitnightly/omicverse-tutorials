@@ -11,6 +11,7 @@ index_bulk
 index_single
 index_spatial
 index_airr
+index_flow
 index_protein
 index_mol
 index_synbio
