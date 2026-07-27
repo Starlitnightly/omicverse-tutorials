@@ -25,6 +25,11 @@ network re-solves its yield.*
 - [CRISPR editing & directed-evolution libraries](t_synbio_03_crispr_library.ipynb) — guide-RNA design + off-target specificity (CFD), base editing & HDR knock-in, degenerate-codon / DMS libraries, and ESM model-guided variant design.
 - [Advanced SOTA — mRNA design, de-novo binders, prime editing](t_synbio_04_advanced.ipynb) — the advanced state-of-the-art layer with baseline↔SOTA comparisons: mRNA therapeutics (**LinearDesign**), RNA / siRNA / antisense design, **prime editing** (PrimeDesign), CRISPRi/a & Cas13, dynamic FBA, minimal cut sets, retrobiosynthesis, and the full **de-novo binder** pipeline (**RFdiffusion → ProteinMPNN → Boltz-2**).
 
+### Closing the gaps — reconstruction, omics coupling, and manufacturability
+
+- [Building a strain from scratch — layer A end to end](t_synbio_05_strain_from_scratch.ipynb) — start where industrial work actually starts: an organism BiGG has no model for. Reconstruct by homology transfer, gap-fill, validate, constrain the model with a **real published *E. coli* protein-abundance table** (GIMME / iMAT / RIPTiDe), predict knockouts with MOMA and ROOM instead of FBA alone, derive OptForce MUST/FORCE sets, add thermodynamic and proteome-budget constraints, solve a two-member community, and hand the pathway to layer B via reaction→enzyme matching.
+- [From a design to an order — manufacturability, kinetics, ancestors and DNA](t_synbio_06_design_to_order.ipynb) — the question that kills industrial enzyme projects: *can it be made?* Solubility, aggregation hotspots, signal peptides and localisation; K_M and k_cat/K_M and substrate scope; ancestral reconstruction for thermostability; then codon **harmonisation** (not optimisation), synthesis difficulty, Golden Gate overhang fidelity, terminator strength, truth-table→DNA compilation, biosecurity screening, and vector-backbone selection.
+
 ### Worked case studies
 
 - [Case study I — an *E. coli* succinate cell factory](t_synbio_case01_succinate.ipynb) — a real metabolic-engineering project: diagnose, strain-design (FSEOF + OptKnock), verify, check thermodynamics (eQuilibrator + MDF), enzyme k_cat, and build.
