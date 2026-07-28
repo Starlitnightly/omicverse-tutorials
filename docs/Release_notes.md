@@ -1480,3 +1480,106 @@ Patch release on top of 2.2.2.
   publishes to PyPI via GitHub Actions (`.github/workflows/publish-pypi.yml`,
   PyPI trusted publishing / OIDC), replacing the manual
   `python -m build` / `twine upload` flow.
+
+
+## v 2.2.4
+
+Written after the fact: this version shipped to PyPI without notes.
+
+### New modules
+- **`ov.synbio` (PRs #887, #895)** — a three-layer synthetic-biology module
+  (metabolism / protein-enzyme / DNA), extended in the same cycle with mRNA
+  design, de-novo binders, prime editing and dynamic FBA.
+
+### single module
+- **Cross-species integration (PRs #893, #894)** — orthologs plus SAMap and
+  SATURN, with CAMEX added as a further backend (`method='camex'`).
+- **Seurat-style RPCA integration (PR #899)** — `methods='rpca'`.
+
+### pp module
+- **GPU doublet detection (PRs #886, #888, #889)** — chunked-GPU kNN for
+  scDblFinder and DoubletFinder's pANN, and GPU/torch post-processing for
+  sccomposite, which had been running out of memory at 1e5 cells.
+- **Fixes** — `qc_gpu`'s final filter counted the wrong thing (cells and genes,
+  not counts, PR #890); `qc_gpu` doublet methods failed outright on a GPU matrix
+  (PR #897); a stall on large datasets with pyscdblfinder below 0.2.0 (PR #892).
+
+### Other
+- `ov.pl.qc` clips UMIs and genes for display only (PR #896); `ov.space.svg`
+  guards `mode='pearsonr'` against all-zero spots (PR #898); FlowSig
+  bootstrapping is process-safe (PR #878); `cpu_gpu_mixed_init` takes a
+  `devices` argument (PR #891).
+
+## v 2.3.0
+
+A minor release rather than a patch: eight modules are new since 2.2.4.
+
+### New modules
+- **`ov.flow` (PRs #906, #907)** — flow cytometry. A general FCS reader
+  (`ov.io.read_fcs`), display transforms, and the gating strategy tree. Two
+  fixes in the same cycle: the Gating-ML being written was not valid Gating-ML
+  (PR #910), and a quadrant's sub-populations are populations in their own right
+  and can be parents (PR #911).
+- **`ov.mol` molecular dynamics (PR #905)** — GPU simulation, trajectory
+  analysis and MM-GBSA.
+- **`ov.alignment` (PR #904)** — homology search through DIAMOND or BLAST+, and
+  Sanger `.ab1` verification.
+
+### pl module
+- **Table-first statistical plots with an AnnData adapter (PR #920)** — a
+  DataFrame, bare arrays and an AnnData are interchangeable, and every plot that
+  computes something is checked against scipy or statsmodels on the same data.
+- **Clinical statistics and publication figure assembly (PR #919)**.
+
+### space module
+- **SPATA2-style coordinate utilities (PR #847)** — coordinate tables, variable
+  joins, tissue outlines, spatial-outlier filtering, pixel/unit conversion.
+- **The arrangement layer (PR #924)** — `ov.space.nb` for statistics over the
+  spatial graph (neighbourhood enrichment, co-occurrence across distance,
+  interaction matrix, group centrality, Ripley, sepal, masking, sliding windows,
+  distance-from-anchor gradients); `ov.space.niche` for recurrent multicellular
+  structure, completing squidpy's three `calculate_niche` flavours and exposing
+  `nmf_tissue_zones` as `niche.molecular`, the name the literature uses;
+  `ov.space.geom` for serial-section alignment, 3-D stacking and interpolation.
+  Semantics follow squidpy deliberately, so the numbers are checkable: measured
+  against squidpy 1.6.5 on an identical graph, `interaction_matrix`,
+  `nhood_enrichment` counts and `centrality` are exact, `co_occurrence` and all
+  three Ripley modes give Pearson r = 1.0000, and `var_by_distance` agrees to
+  1.11e-16.
+- **Stereo-seq (PR #924)** — `ov.io.spatial.read_stereoseq` reads a GEM and bins
+  it; `bin_stereoseq` re-aggregates in memory and refuses a size the existing
+  bins do not nest into.
+- **`spatial_neighbors` gains `coord_type='grid'`** — plain k-NN cannot know an
+  array platform has a lattice, so a spot on the rim of the tissue reaches
+  across the gap to fill its quota and acquires neighbours it does not touch.
+  The default stays `'generic'` so existing results do not move.
+
+### synbio module
+- **The D-segment gaps closed (PR #916)** — reconstruction, omics to GEM,
+  manufacturability and biosecurity.
+- **Roughly forty defects corrected (PR #917)** that produced plausible but
+  wrong numbers — transformed Gibbs energies, tRNA counts and wobble
+  conventions, replichore fractions, Echo transfer arithmetic, growth-model
+  selection, and more. Each was found by checking a figure or a number against
+  its source, not by a test failing.
+- **`[synbio]` was uninstallable** because of the `rs3` pin (PR #912); Rule Set
+  3 returns through a `--no-deps` runtime fetch (PR #913).
+
+### Bug fixes
+- **`ov.pp.leiden` through MCP (PR #925)** — the MCP server advertised the tool
+  while its extra could not install `leidenalg`.
+- **rpy2 mclust replaced (PR #918)** — five spatial wrappers embedded separate
+  `rpy2` bridges; they now share the pure-Python `pymclustR` backend. Measured
+  against R mclust 6.1.2 on identical coordinates, log-likelihood and BIC agree
+  to six decimals and every cell lands in the same cluster.
+- **CopyKAT now says when its genome tables are missing (PR #922)** instead of
+  failing silently.
+- **AIRR multichain cells (PR #923)** — resolved into their biologically
+  distinct subtypes rather than discarded as artefacts.
+- **`ov.tl` / `ov.es` / `ov.micro` discoverable in a fresh session (PR #908)**.
+
+### Infrastructure
+- The `omicverse_guide` submodule advances ten commits, to cover every tutorial
+  merged since the `ov.flow` series. Documentation builds read the tutorials
+  through this pointer, so leaving it behind kept that material off the docs
+  site.
