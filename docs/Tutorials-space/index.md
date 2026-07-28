@@ -2,6 +2,11 @@
 
 This page mirrors the `Space` section in `mkdocs.yml` and provides a markdown entry point for the spatial tutorial notebooks.
 
+## Arrangement, niches and 3-D
+
+- [How the tissue is arranged: spatial statistics and niches](t_spatial_arrangement.ipynb) — neighbourhood enrichment, co-occurrence over distance, group centrality, Ripley, distance-from-anchor gradients, region masking, and the three flavours of niche analysis ([issue #760](https://github.com/omicverse/omicverse/issues/760)).
+- [From serial sections to a volume, and reading Stereo-seq](t_spatial_3d.ipynb) — `ov.space.geom` alignment validated against known rotations, 3-D stacking, section interpolation, and the Stereo-seq GEM reader with bin-size sweep.
+
 ## SPATA2-inspired utilities
 
 - [SPATA2-inspired AnnData spatial utilities](t_spata2py.ipynb) - coordinate tables, variable joins, tissue outlines, spatial outlier filtering, unit conversion, benchmark, and a clear note that this is not full SPATA2 parity.

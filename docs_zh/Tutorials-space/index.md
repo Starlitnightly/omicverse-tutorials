@@ -1,3 +1,10 @@
+
+
+## Arrangement, niches and 3-D
+
+- [How the tissue is arranged: spatial statistics and niches](t_spatial_arrangement.ipynb) — neighbourhood enrichment, co-occurrence over distance, group centrality, Ripley, distance-from-anchor gradients, region masking, and the three flavours of niche analysis ([issue #760](https://github.com/omicverse/omicverse/issues/760)).
+- [From serial sections to a volume, and reading Stereo-seq](t_spatial_3d.ipynb) — `ov.space.geom` alignment validated against known rotations, 3-D stacking, section interpolation, and the Stereo-seq GEM reader with bin-size sweep.
+
 ## 受 SPATA2 启发的工具
 
 - [受 SPATA2 启发的 AnnData 空间工具](t_spata2py.ipynb) - 坐标表、变量拼接、组织轮廓、空间离群点过滤、单位换算、benchmark，并明确说明这不是完整 SPATA2 parity。
