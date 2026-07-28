@@ -2,6 +2,10 @@
 
 This page mirrors the `Space` section in `mkdocs.yml` and provides a markdown entry point for the spatial tutorial notebooks.
 
+## SPATA2-inspired utilities
+
+- [SPATA2-inspired AnnData spatial utilities](t_spata2py.ipynb) - coordinate tables, variable joins, tissue outlines, spatial outlier filtering, unit conversion, benchmark, and a clear note that this is not full SPATA2 parity.
+
 ## Preprocess
 
 - [Crop and Rotation of spatial transcriptomic data](t_crop_rotate.ipynb)
