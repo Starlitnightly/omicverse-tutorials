@@ -38,6 +38,8 @@ site/
 *.swp
 *.swo
 *site*/
+docs/Tutorials-plotting/data/
+docs/Tutorials-plotting/figures/
 docs/Tutorials-space/data/
 docs/Tutorials-single/data/
 docs/Tutorials-single/batch/zoo/data/
