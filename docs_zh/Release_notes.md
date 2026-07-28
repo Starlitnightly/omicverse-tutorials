@@ -860,3 +860,90 @@ results = deg_obj.get_results()
 - 更新和扩展 agent 架构和流式 API 文档。
 - 更新 `t_preprocess_cpu.ipynb`，匹配最新的 GPU/版本检测行为。
 - 为 Jarvis 和 agent 相关工作流新增双语和部署导向指南。
+
+
+## v 2.2.4
+
+补记:该版本发布到 PyPI 时没有写 release notes。
+
+### 新增模块
+- **`ov.synbio`(PR #887、#895)** —— 三层合成生物学模块(代谢 / 蛋白·酶 / DNA),
+  同期扩展了 mRNA 设计、de novo binder、prime editing 与动态 FBA。
+
+### single 模块
+- **跨物种整合(PR #893、#894)** —— 直系同源 + SAMap + SATURN,并新增 CAMEX
+  后端(`method='camex'`)。
+- **Seurat 风格的 RPCA 整合(PR #899)** —— `methods='rpca'`。
+
+### pp 模块
+- **GPU 双细胞检测(PR #886、#888、#889)** —— scDblFinder 与 DoubletFinder 的
+  pANN 改用分块 GPU kNN,sccomposite 后处理转 GPU/torch(此前在 1e5 细胞量级会
+  内存溢出)。
+- **修复** —— `qc_gpu` 最终过滤统计的对象搞错了(应为细胞与基因数而非 counts,
+  PR #890);`qc_gpu` 的双细胞方法在 GPU 矩阵上直接失败(PR #897);
+  pyscdblfinder 低于 0.2.0 时大数据集卡死(PR #892)。
+
+### 其他
+`ov.pl.qc` 对 UMI 与基因数只做显示层裁剪(PR #896);`ov.space.svg` 的
+`mode='pearsonr'` 对全零 spot 加了保护(PR #898);FlowSig 的 bootstrap 改为
+进程安全(PR #878);`cpu_gpu_mixed_init` 新增 `devices` 参数(PR #891)。
+
+## v 2.3.0
+
+次版本号而非补丁号:自 2.2.4 起新增了八个模块。
+
+### 新增模块
+- **`ov.flow`(PR #906、#907)** —— 流式细胞术。通用 FCS 读取器
+  (`ov.io.read_fcs`)、显示变换、门控策略树。同期两处修复:写出的 Gating-ML
+  并不是合法的 Gating-ML(PR #910);象限的子群本身就是群体,可以作为父节点
+  (PR #911)。
+- **`ov.mol` 分子动力学(PR #905)** —— GPU 模拟、轨迹分析、MM-GBSA。
+- **`ov.alignment`(PR #904)** —— 基于 DIAMOND / BLAST+ 的同源搜索,以及
+  Sanger `.ab1` 验证。
+
+### pl 模块
+- **表格优先的统计绘图与 AnnData 适配器(PR #920)** —— DataFrame、裸数组和
+  AnnData 可互换,凡是会算出数字的图,都用 scipy 或 statsmodels 在同一份数据上
+  对过。
+- **临床统计与出版级图表排版(PR #919)**。
+
+### space 模块
+- **SPATA2 风格的坐标工具(PR #847)** —— 坐标表、变量合并、组织轮廓、空间离群
+  过滤、像素与物理单位换算。
+- **排布层(PR #924)** —— `ov.space.nb` 提供空间图上的统计(邻域富集、随距离的
+  共现、交互矩阵、群体中心性、Ripley、sepal、区域掩膜、滑动窗口、距锚点的表达
+  梯度);`ov.space.niche` 处理重复出现的多细胞结构,补齐 squidpy
+  `calculate_niche` 的三种 flavor,并把 `nmf_tissue_zones` 以文献惯用的名字
+  `niche.molecular` 暴露出来;`ov.space.geom` 负责连续切片对齐、3D 堆叠与插值。
+  语义刻意对齐 squidpy,使得数字可核对:在同一张图上对照 squidpy 1.6.5,
+  `interaction_matrix`、`nhood_enrichment` 计数与 `centrality` **完全一致**,
+  `co_occurrence` 与三种 Ripley 模式的 Pearson r = 1.0000,`var_by_distance`
+  差异 1.11e-16。
+- **Stereo-seq(PR #924)** —— `ov.io.spatial.read_stereoseq` 读取 GEM 并分箱;
+  `bin_stereoseq` 在内存中重新聚合,并拒绝无法整除嵌套的 bin 尺寸。
+- **`spatial_neighbors` 新增 `coord_type='grid'`** —— 纯 kNN 无法知道阵列平台
+  存在晶格,组织边缘的 spot 会跨过空隙凑够邻居数,连上并不相邻的点。默认仍为
+  `'generic'`,不改变既有结果。
+
+### synbio 模块
+- **补齐 D 段缺口(PR #916)** —— 重建、组学到 GEM、可制造性、生物安全。
+- **修正约四十处会产出"看似合理但错误的数字"的缺陷(PR #917)** —— 转换后的
+  吉布斯自由能、tRNA 计数与摆动配对约定、replichore 比例、Echo 转移量的算术、
+  生长模型选择等。每一处都是把图或数字对照原始文献核出来的,不是靠测试报错。
+- **`[synbio]` 曾经装不上**(`rs3` 的固定版本所致,PR #912);Rule Set 3 通过
+  `--no-deps` 运行时拉取回归(PR #913)。
+
+### 缺陷修复
+- **MCP 下的 `ov.pp.leiden`(PR #925)** —— MCP 服务器广告了这个工具,而它自己的
+  extra 装不出 `leidenalg`。
+- **移除 rpy2 mclust(PR #918)** —— 五个空间 wrapper 各自内嵌了 `rpy2` 桥接,
+  现统一走纯 Python 的 `pymclustR` 后端。在同一批坐标上对照 R mclust 6.1.2,
+  对数似然与 BIC 到小数点后六位一致,每个细胞落在同一个簇。
+- **CopyKAT 在缺少基因组表时会明确报错(PR #922)**,而不是静默失败。
+- **AIRR 的 multichain 细胞(PR #923)** —— 按生物学上不同的亚型拆解,而不是当作
+  技术假象丢弃。
+- **`ov.tl` / `ov.es` / `ov.micro` 在新会话中可被发现(PR #908)**。
+
+### 基础设施
+- `omicverse_guide` submodule 前进十个提交,覆盖 `ov.flow` 系列之后合入的全部
+  教程。文档构建通过这个指针读取教程,指针滞后就意味着这些内容进不了文档站。
