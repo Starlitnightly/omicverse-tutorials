@@ -12,4 +12,5 @@
 ../Tutorials-plotting/t_plot1cell
 ../Tutorials-plotting/t_funkyheatmap
 ../Tutorials-plotting/t_clinical_stats_layout
+../Tutorials-plotting/t_statistical_plots
 ```
