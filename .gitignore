@@ -39,6 +39,8 @@ site/
 *.swo
 *site*/
 docs/Tutorials-plotting/data/
+docs/Tutorials-plotting/images/
+docs/Tutorials-plotting/Intersections_*.txt
 docs/Tutorials-plotting/figures/
 docs/Tutorials-space/data/
 docs/Tutorials-single/data/
