@@ -215,3 +215,4 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
 - [Color system](Tutorials-plotting/t_visualize_colorsystem.ipynb)
 - [Circular UMAP + plot1cell-style visualizations](Tutorials-plotting/t_plot1cell.ipynb)
 - [Funky heatmaps for benchmark / multi-metric tables](Tutorials-plotting/t_funkyheatmap.ipynb)
+- [Clinical statistics and figure assembly](Tutorials-plotting/t_clinical_stats_layout.ipynb)
