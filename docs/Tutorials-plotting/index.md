@@ -11,3 +11,4 @@ This page mirrors the `Plotting` section in `mkdocs.yml`.
 - [Circular UMAP + plot1cell-style visualizations](t_plot1cell.ipynb)
 - [Funky heatmaps for benchmark / multi-metric tables](t_funkyheatmap.ipynb)
 - [Clinical statistics and figure assembly (survival, ROC, forest, panels, editable SVG)](t_clinical_stats_layout.ipynb)
+- [Statistical plots from a table (violin/bar/ridge/QQ/regression, significance brackets, no AnnData needed)](t_statistical_plots.ipynb)

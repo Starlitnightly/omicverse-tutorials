@@ -216,3 +216,4 @@ This page is the markdown overview for the tutorial structure defined in `mkdocs
 - [Circular UMAP + plot1cell-style visualizations](Tutorials-plotting/t_plot1cell.ipynb)
 - [Funky heatmaps for benchmark / multi-metric tables](Tutorials-plotting/t_funkyheatmap.ipynb)
 - [Clinical statistics and figure assembly](Tutorials-plotting/t_clinical_stats_layout.ipynb)
+- [Statistical plots from a table](Tutorials-plotting/t_statistical_plots.ipynb)
