@@ -1583,3 +1583,64 @@ A minor release rather than a patch: eight modules are new since 2.2.4.
   merged since the `ov.flow` series. Documentation builds read the tutorials
   through this pointer, so leaving it behind kept that material off the docs
   site.
+
+## v 2.3.1
+
+A patch release. Every entry came from checking 2.3.0's documented API
+against its own source while building agent tooling — three of them break
+code that the documentation says should work, and the rest are places
+where a docstring described behaviour the code does not have. No
+numerical behaviour changed.
+
+### Fixes
+- **`ov.synbio` — 33 exported names were unreachable (PR #927).** The
+  facade resolves attributes through a lazy map, and 33 names across 20
+  submodules were in their module's `__all__` but missing from it, so
+  `ov.synbio.<name>` raised `AttributeError` while the docs advertised
+  them — `ACQUISITIONS`, `METHODS`, `DECISIONS`, `DIFFUSION_LIMIT`,
+  `ECHO_COLUMNS`, `MDFResult`, `RBSResult`, `Gene`, `OffTarget` and the
+  whole `_tuning` constant set among them. A test now walks every
+  submodule's `__all__` and asserts each name resolves, in both
+  directions, without needing the `[synbio]` extra.
+- **`ov.pl.slopeplot(test='auto')` raised.** Every other table-first plot
+  funnels `test` through the shared resolver where `'auto'` becomes a
+  rank test; `slopeplot` passed the raw string through. It now resolves
+  to Wilcoxon signed-rank — the paired counterpart, since `slopeplot`
+  requires `subject=` and is paired by construction — and the resolved
+  name reaches `stats['test']` and the on-plot label.
+- **`ov.space.niche` needed a scanpy keyword newer than our own pin.**
+  `sc.tl.leiden(flavor='igraph')` arrived in scanpy 1.10 while omicverse
+  pins `scanpy>=1.9`, so `niche.neighborhood` and `niche.utag` raised
+  `TypeError` on an otherwise valid environment. The keyword is now
+  passed only when the installed signature accepts it.
+
+### Documentation corrected to match the code
+- `predict_localization` advertised four compartments; the heuristic can
+  only return three. `periplasm` strictly dominates `secreted` in both
+  branches, which is right for *E. coli* — a Sec signal peptide delivers
+  to the periplasm and real secretion needs a system this heuristic
+  cannot see — so the scoring is unchanged and the claim is fixed
+  instead. `secreted` stays in `.scores` so the margin is inspectable.
+- `mmgbsa(md_refine_ns=0)` said it "scores the minimised pose only";
+  scoring needs a trajectory, so the floor is minimise plus 2 ps of NVT.
+  Documented rather than changed: scoring a single frame would report
+  `std=0` and `sem=0`, a precision MM-GBSA does not have.
+- `test='auto'` was described as automatic test selection. It is
+  unconditionally Mann-Whitney U with no normality, variance or
+  sample-size check. The omnibus row's `pvalue_corrected` is a copy of
+  the raw p value, and now says so.
+- Plackett-Burman documented "n a multiple of 4" but the Sylvester
+  construction only yields powers of two, so 12- and 20-run designs are
+  unreachable. `_refseq`'s doctest asserted a cleavage site of 21 where
+  the shipped tie resolves to 23. `fetch_promoter_library` asserted a
+  143-fold span the shipped table does not match, and now tells the
+  reader to measure it. `niche.molecular`'s registered example called
+  `zones.plot_factor_loadings()`, which does not exist — `TissueZones`
+  is a dataclass with no methods.
+
+### Tutorials
+- **Tutorial 05 could not run against 2.3.0.** `reconstruct_gem('strainX.faa', ...)`
+  names a placeholder file the notebook never creates, and 2.3.0 closed
+  exactly that hole. It now passes `proteome=None`, which is the
+  documented way to say "mapping only, no proteome" — precisely what the
+  cell demonstrates.
